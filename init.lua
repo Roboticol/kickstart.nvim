@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -176,6 +176,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- for toggling nvimtree
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -204,6 +205,12 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- OR setup with some options
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -249,6 +256,28 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
 
+  {
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
+    lazy = false,
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('nvim-tree').setup {}
+      vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { silent = true })
+      vim.keymap.set('n', '<leader>f', function()
+        local view = require 'nvim-tree.view'
+        local api = require 'nvim-tree.api'
+
+        if view.is_visible() then
+          vim.cmd 'wincmd p'
+        else
+          api.tree.focus()
+        end
+      end, { noremap = true, silent = true })
+    end,
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
