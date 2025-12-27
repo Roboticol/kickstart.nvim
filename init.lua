@@ -102,7 +102,7 @@ vim.g.have_nerd_font = true
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -255,6 +255,10 @@ rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  'williamboman/mason.nvim',
+  'neovim/nvim-lspconfig',
+  'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
+  require 'kickstart.plugins.cmp',
 
   {
     'nvim-tree/nvim-tree.lua',
@@ -266,7 +270,7 @@ require('lazy').setup({
     config = function()
       require('nvim-tree').setup {}
       vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { silent = true })
-      vim.keymap.set('n', '<leader>f', function()
+      vim.keymap.set('n', '<leader>b', function()
         local view = require 'nvim-tree.view'
         local api = require 'nvim-tree.api'
 
